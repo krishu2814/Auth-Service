@@ -45,3 +45,5 @@ const isAuthenticUser = (req, res, next) => {
     req.user = decodedToken;
     next(); 
 }
+
+module.exports = isAuthenticUser;
