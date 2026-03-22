@@ -5,6 +5,52 @@ class UserController {
         this.userService = new UserService();
     }   
 
+    async signIn(req, res) {
+        try {
+            const user = await this.userService.signIn({
+                email: req.body.email,
+                password: req.body.password,
+            });
+            return res.status(200).json({
+                success: true,
+                message: 'Successfully signed in',
+                data: user,
+                err: {}
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({
+                success: false,
+                message: error,
+                data: {},
+                err: error
+            });
+        }
+    }
+
+    async signUp(req, res) { 
+        try {
+            const user = await this.userService.signUp({
+                email: req.body.email,
+                password: req.body.password,
+            });
+            return res.status(201).json({
+                success: true,
+                message: 'Successfully signed up',
+                data: user,
+                err: {}
+            }); 
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                message: error.message,
+                data: {},
+                err: error
+            });
+
+        }
+    }
+
     async createUser(req, res) {
         try {
             const user = await this.userService.createUser({
