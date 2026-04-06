@@ -13,7 +13,7 @@ const isAuthenticUser = (req, res, next) => {
         });
     }
 
-    if (!authHeader.startsWith('Bearer ')) {
+    if (!authHeader.startsWith('Bearer')) {
         return res.status(401).json({
             success: false,
             message: 'Invalid token format'

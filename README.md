@@ -1,87 +1,219 @@
-# 🔐 Auth Service (Microservices Architecture)
+# 🔐 Auth Service (User Authentication Microservice)
 
-A scalable and secure **Authentication Service** built using **Node.js, Express, MongoDB**, implementing **JWT-based authentication** and clean architecture (Controller → Service → Repository).
+A secure and scalable **Authentication Service** built using **Node.js, Express, and MongoDB**, designed as part of a **microservices-based architecture**.
 
-----------------
-
-## 🚀 Features
-
-- 🔑 User Signup & Login (JWT-based authentication)
-- 🔒 Password hashing using bcrypt
-- 🧾 Token-based authentication using JWT
-- 🏗️ Clean architecture (Controller, Service, Repository pattern)
-- 📦 RESTful APIs
-- 🛡️ Input validation & error handling
-- ⚡ Scalable microservice-ready structure
-
-------------------
-
-## 🧱 Tech Stack
-
-- **Backend:** Node.js, Express.js  
-- **Database:** MongoDB (Mongoose)  
-- **Authentication:** JWT (jsonwebtoken)  
-- **Security:** bcrypt  
-- **Environment:** dotenv  
+This service handles **user authentication, authorization, and user management**, including signup, login, and user CRUD operations.
 
 ---
 
-## 📁 Project Structure
-src/
-├── controllers/
-├── services/
-├── repository/
-├── models/
-├── routes/
-├── config/
-├── middlewares/
-└── index.js
+## 🚀 Features
 
---------------------
+* 🔐 User Signup (Registration)
+* 🔑 User Login (Authentication) -> Using JWT Token
+* 👤 Get User by ID
+* 📧 Get User by Email
+* ✏️ Update User Details
+* ❌ Delete User
+* 🔒 Password Storage (hashed - assumed) -> Using Bcrypt
+* 🧩 Designed for Microservices Integration
 
-## ⚙️ Installation & Setup
+---
 
-### 1️⃣ Clone the repository
-`git clone https://github.com/your-username/auth-service.git`
-`cd auth-service`
+## 🏗️ Tech Stack
 
-### 2️⃣ Install dependencies -> 
-`npm install`
+* **Backend:** Node.js, Express.js
+* **Database:** MongoDB (Mongoose ODM)
+* **Authentication:** JWT (assumed in controller)
+* **Architecture:** Microservices
+* **Version Control:** Git & GitHub
 
+---
 
-### 3️⃣ Setup environment variables
+## 📂 Project Structure
 
-Create a `.env` file:
-    PORT=3000
-    MONGO_URL=your_mongodb_connection
-    JWT_SECRET=your_secret_key
-    
+```id="k92xsl"
+auth-service/
+│
+├── src/
+│   ├── controllers/
+│   │   └── user-controller.js
+│   ├── routes/
+│   │   └── v1/
+│   │       └── user-routes.js
+│   ├── models/
+│   │   └── user-model.js
+│   ├── services/
+│   ├── repository/
+│   └── config/
+│
+├── package.json
+├── .env
+└── README.md
+```
 
-### 4️⃣ Run the server -> 
-`npm run dev`
+---
 
+## ⚙️ API Endpoints
 
-### 🔐 Authentication
-| Method | Endpoint | Description |
-|--------|---------|------------|
-| POST   | /signup | Register a new user |
-| POST   | /login  | Login user & get JWT |
+### 🔐 Authentication APIs
 
-### 👤 User Management
-| Method | Endpoint | Description |
-|--------|---------|------------|
-| GET    | /user/:id | Get user by ID |
-| GET    | /user/email/:email | Get user by email |
-| PATCH  | /user/:id | Update user |
-| DELETE | /user/:id | Delete user |
+| Method | Endpoint  | Description         |
+| ------ | --------- | ------------------- |
+| POST   | `/signup` | Register a new user |
+| POST   | `/login`  | Authenticate user   |
 
+---
+
+### 👤 User APIs
+
+| Method | Endpoint             | Description       |
+| ------ | -------------------- | ----------------- |
+| GET    | `/user/:id`          | Get user by ID    |
+| GET    | `/user/email/:email` | Get user by email |
+| PATCH  | `/user/:id`          | Update user       |
+| DELETE | `/user/:id`          | Delete user       |
+
+---
+
+## 🧠 Data Model
+
+```js id="x92lsl"
+{
+  userName: String,
+  email: String,     // unique
+  password: String   // hashed password
+}
+```
+
+---
 
 ## 🔐 Authentication Flow
-1. User signs up → password hashed using bcrypt  
-2. User logs in → password verified  
-3. JWT token generated  
-4. Token used for accessing protected routes  
 
+1. User signs up → credentials stored in DB
+2. User logs in → credentials verified
+3. JWT token generated (in controller)
+4. Token used to access protected services
 
-## 🧠 Architecture
-Controller → Service → Repository → Database
+---
+
+## 🛠️ Installation & Setup
+
+### 1️⃣ Clone Repository
+
+```bash id="p92kls"
+git clone https://github.com/your-username/auth-service.git
+cd auth-service
+```
+
+### 2️⃣ Install Dependencies
+
+```bash id="l82kls"
+npm install
+```
+
+### 3️⃣ Environment Variables
+
+Create `.env` file:
+
+```id="m92ksl"
+PORT=3000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+```
+
+---
+
+### 4️⃣ Run Server
+
+```bash id="z82ksl"
+npm start
+```
+
+---
+
+## 🧪 API Testing
+
+Use tools like:
+
+* Postman
+* Thunder Client
+* Mongodb Compass
+* Mongodb Atlas
+
+---
+
+## 📈 Future Enhancements
+
+* 🔒 Password Hashing (bcrypt)
+* 🔁 Refresh Tokens
+* 🚫 Token Blacklisting (Logout Support)
+* 🔐 Role-Based Access Control (RBAC)
+* 📧 Email Verification
+* 🔑 OAuth (Google, GitHub Login)
+
+---
+
+## 🌐 Role in Microservices Architecture
+
+This service acts as the **core authentication provider**:
+
+* Auth Service ✅
+* Product Service ✅
+* Cart Service ✅
+* Order Service ✅
+* Payment Service 🚧
+* API Gateway 🚧
+
+---
+
+## 🔄 Service Communication
+
+* JWT-based authentication
+* API Gateway validation
+* Inter-service communication via REST/events
+
+---
+
+## 🧪 Best Practices Followed
+
+* ✅ RESTful API Design
+* ✅ MVC Architecture
+* ✅ Secure Authentication Flow
+* ✅ Separation of Concerns
+* ✅ Scalable Folder Structure
+
+---
+
+## 💼 Why This Project?
+
+This project demonstrates:
+
+* Secure backend development
+* Authentication & authorization systems
+* Microservices architecture understanding
+* Real-world user management
+
+---
+
+## 🤝 Contributing
+
+```bash id="c92lsl"
+# Fork the repository
+git checkout -b feature/NewFeature
+
+# Commit changes
+git commit -m "Add feature"
+
+# Push changes
+git push origin feature/NewFeature
+```
+
+---
+
+## 📬 Contact
+
+**Krishu Kumar**  
+📧 Email: [krishukumarsingh06@gmail.com](mailto:krishukumarsingh06@gmail.com)  
+🐙 GitHub: https://github.com/krishu2814
+
+---
