@@ -10,16 +10,19 @@ class UserService {
 
     async signIn(data) {
     try {
-        const { email, password } = data;
+        const { email, password, role } = data;
 
-        if (!email || !password) {
-            throw new Error("Email and password are required");
+        if (!email || !password || !role) {
+            throw new Error("Email, password, and role are required");
         }
 
         // 1️) check if user exists
         const existingUser = await this.userRepository.findUserByEmail(email);
         if (!existingUser) {
             throw new Error("User does not exist.");
+        }
+        if (existingUser.role !== role) {
+            throw new Error(`User role mismatch. Expected role: ${existingUser.role}`);
         }
 
         // 2️) compare password
@@ -33,7 +36,7 @@ class UserService {
 
         // 4️) generate token
         const token = JWT.sign(
-            { id: existingUser._id, email: existingUser.email },
+            { id: existingUser._id, email: existingUser.email ,role: existingUser.role},
             SECRET_TOKEN,
             { expiresIn: EXPIRES_IN }
         );
@@ -71,7 +74,7 @@ class UserService {
 
         // generate token
         const token = JWT.sign(
-            { id: user._id, email: user.email },
+            { id: user._id, email: user.email, role: user.role },
             SECRET_TOKEN,
             { expiresIn: EXPIRES_IN }
         );

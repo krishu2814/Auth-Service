@@ -10,7 +10,9 @@ class UserController {
             const user = await this.userService.signIn({
                 email: req.body.email,
                 password: req.body.password,
+                role: req.body.role
             });
+            // console.log('User signed in:', user);
             return res.status(200).json({
                 success: true,
                 message: 'Successfully signed in',
@@ -33,7 +35,9 @@ class UserController {
             const user = await this.userService.signUp({
                 email: req.body.email,
                 password: req.body.password,
+                role: req.body.role
             });
+            // console.log('User signed up:', user);
             return res.status(201).json({
                 success: true,
                 message: 'Successfully signed up',

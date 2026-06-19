@@ -16,7 +16,7 @@ class UserRepository {
     }
 
     async updateUser(id, data) { 
-        return await User.findByIdAndUpdate(id, data,).save(); // return updated user
+        return await User.findByIdAndUpdate(id, data, {new : true});
     }
 
     async deleteUser(id) {
