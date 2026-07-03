@@ -5,6 +5,7 @@ const userRepository = new UserRepository();
 
 const isAuthenticUser = async (req, res, next) => {
     try {
+        console.log("Authentication middleware called");
      // Node automatically lowercases headers
         const authHeader = req.headers['authorization'];
         if (!authHeader) {
@@ -56,7 +57,12 @@ const isAuthenticUser = async (req, res, next) => {
 
         // Important for other services to know which user is making 
         // the request to get user Id from token and attach to req object
-        req.user = validUser;
+        console.log('Authenticated user:', validUser);
+        req.user = {
+            id: validUser._id,
+            email: validUser.email,
+            role: validUser.role
+        };; // mongo db user object
         next(); 
     }
 
