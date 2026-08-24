@@ -57,12 +57,13 @@ const isAuthenticUser = async (req, res, next) => {
 
         // Important for other services to know which user is making 
         // the request to get user Id from token and attach to req object
-        console.log('Authenticated user:', validUser);
         req.user = {
             id: validUser._id,
+            userId: validUser._id,
+            _id: validUser._id,
             email: validUser.email,
             role: validUser.role
-        };; // mongo db user object
+        };
         next(); 
     }
 
