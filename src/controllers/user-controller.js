@@ -23,9 +23,9 @@ class UserController {
             console.log(error);
             return res.status(400).json({
                 success: false,
-                message: error,
+                message: error.message || error,
                 data: {},
-                err: error
+                err: error.message || error
             });
         }
     }
