@@ -5,14 +5,13 @@ class UserController {
         this.userService = new UserService();
     }   
 
-    async signIn(req, res) {
+    async signIn(req, res, next) {
         try {
             const user = await this.userService.signIn({
                 email: req.body.email,
                 password: req.body.password,
                 role: req.body.role
             });
-            // console.log('User signed in:', user);
             return res.status(200).json({
                 success: true,
                 message: 'Successfully signed in',
@@ -20,24 +19,19 @@ class UserController {
                 err: {}
             });
         } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                success: false,
-                message: error.message || error,
-                data: {},
-                err: error.message || error
-            });
+            next(error);
         }
     }
 
-    async signUp(req, res) { 
+    async signUp(req, res, next) { 
         try {
             const user = await this.userService.signUp({
+                name: req.body.name,
+                userName: req.body.userName,
                 email: req.body.email,
                 password: req.body.password,
                 role: req.body.role
             });
-            // console.log('User signed up:', user);
             return res.status(201).json({
                 success: true,
                 message: 'Successfully signed up',
@@ -45,17 +39,11 @@ class UserController {
                 err: {}
             }); 
         } catch (error) {
-            return res.status(400).json({
-                success: false,
-                message: error.message,
-                data: {},
-                err: error
-            });
-
+            next(error);
         }
     }
 
-    async createUser(req, res) {
+    async createUser(req, res, next) {
         try {
             const user = await this.userService.createUser({
                 email: req.body.email,
@@ -68,120 +56,95 @@ class UserController {
                 err: {}
             });
         } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                message: error.message,
-                data: {},
-                success: false,
-                err: error
-            });
+            next(error);
         }
     }
 
-    async getUserByEmail(req, res) {
+    async getUserByEmail(req, res, next) {
         try {
             const user = await this.userService.getUserByEmail(req.params.email);
             if (!user) {
                 return res.status(404).json({
+                    success: false,
                     message: 'User not found',
                     data: {},
-                    success: false,
                     err: {}
                 });
             }
             return res.status(200).json({
+                success: true,
                 message: 'User found',
                 data: user,
-                success: true,
                 err: {}
             });
         } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                message: error.message,
-                data: {},
-                success: false,
-                err: error
-            });
+            next(error);
         }
     }
 
-    async getUserById(req, res) {
+    async getUserById(req, res, next) {
         try {
             const user = await this.userService.getUserById(req.params.id);
             if (!user) {
                 return res.status(404).json({
+                    success: false,
                     message: 'User not found',
                     data: {},
-                    success: false,
                     err: {}
                 });
             }
             return res.status(200).json({
+                success: true,
                 message: 'User found',
                 data: user,
-                success: true,
                 err: {}
             });
         } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                message: error.message,
-                data: {},
-                success: false,
-                err: error
-            });
+            next(error);
         }
     }
 
-    async updateUser(req, res) {
+    async updateUser(req, res, next) {
         try {
             const user = await this.userService.updateUser(req.params.id, req.body);
             if (!user) {
-                return res.status(404).json({ error: 'User not found' });
+                return res.status(404).json({
+                    success: false,
+                    message: 'User not found',
+                    data: {},
+                    err: {}
+                });
             }
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
                 message: 'Successfully updated a user',
                 data: user,
                 err: {}
             });
         } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                message: error.message,
-                data: {},
-                success: false,
-                err: error
-            });
+            next(error);
         }
     }
 
-    async deleteUser(req, res) {
+    async deleteUser(req, res, next) {
         try {
             const user = await this.userService.deleteUser(req.params.id);
             if (!user) {
                 return res.status(404).json({
+                    success: false,
                     message: 'User not found',
                     data: {},
-                    success: false,
                     err: {}
                 });
             }
             return res.status(200).json({
+                success: true,
                 message: 'User deleted successfully',
                 data: {},
-                success: true,
                 err: {}
             });
         } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                message: error.message,
-                data: {},
-                success: false,
-                err: error
-            });
+            next(error);
         }
     }
 }
