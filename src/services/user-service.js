@@ -9,40 +9,40 @@ class UserService {
     }
 
     async signIn(data) {
-    try {
-        const { email, password, role } = data;
+        try {
+            const { email, password, role } = data;
 
-        if (!email || !password || !role) {
-            throw new Error("Email, password, and role are required");
-        }
+            if (!email || !password) {
+                throw new Error("Email and password are required");
+            }
 
-        // 1️) check if user exists
-        const existingUser = await this.userRepository.findUserByEmail(email);
-        if (!existingUser) {
-            throw new Error("User does not exist.");
-        }
-        if (existingUser.role !== role) {
-            throw new Error(`User role mismatch. Expected role: ${existingUser.role}`);
-        }
+            // 1️) check if user exists
+            const existingUser = await this.userRepository.findUserByEmail(email);
+            if (!existingUser) {
+                throw new Error("User does not exist.");
+            }
+            if (role && existingUser.role !== role) {
+                throw new Error(`User role mismatch. Expected role: ${existingUser.role}`);
+            }
 
-        // 2️) compare password
-        const matchedPassword = await bcrypt.compare(password, existingUser.password);
-        if (!matchedPassword) {
-            throw new Error("Invalid password.");
-        }
+            // 2️) compare password
+            const matchedPassword = await bcrypt.compare(password, existingUser.password);
+            if (!matchedPassword) {
+                throw new Error("Invalid password.");
+            }
 
-        // 3️) remove password before sending response
-        existingUser.password = undefined;
+            // 3️) remove password before sending response
+            existingUser.password = undefined;
 
-        // 4️) generate token
-        const token = JWT.sign(
-            { id: existingUser._id, email: existingUser.email ,role: existingUser.role},
-            SECRET_TOKEN,
-            { expiresIn: EXPIRES_IN }
-        );
+            // 4️) generate token
+            const token = JWT.sign(
+                { id: existingUser._id, email: existingUser.email, role: existingUser.role },
+                SECRET_TOKEN,
+                { expiresIn: EXPIRES_IN }
+            );
 
-        // 5️) return response
-        return { user: existingUser, token };
+            // 5️) return response
+            return { user: existingUser, token };
 
         } catch (error) {
             throw error;
@@ -50,7 +50,6 @@ class UserService {
     }
 
     async signUp(data) {
-
         if (!data.email || !data.password) {
             throw new Error("Email and password are required");
         }
@@ -63,9 +62,17 @@ class UserService {
         // hash password
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
+        // Normalize name and role
+        const role = data.role || 'customer';
+        const name = data.name || data.userName || data.email.split('@')[0];
+        const userName = data.userName || name;
+
         // create user
         const user = await this.userRepository.createUser({
             ...data,
+            name,
+            userName,
+            role,
             password: hashedPassword
         });
 

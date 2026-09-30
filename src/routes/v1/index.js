@@ -10,6 +10,15 @@ const isAuthenticUser = require('../../middlewares/auth-user');
 // router.get('/user/:id', userController.getUserById.bind(userController));
 router.post('/signup', userController.signUp.bind(userController));
 router.post('/login', userController.signIn.bind(userController));
+router.post('/signin', userController.signIn.bind(userController));
+router.get('/profile', isAuthenticUser, (req, res) => {
+    return res.status(200).json({
+        success: true,
+        message: 'User profile fetched successfully',
+        data: req.user,
+        err: {}
+    });
+});
 router.patch('/user/:id', isAuthenticUser, userController.updateUser.bind(userController));
 router.delete('/user/:id', isAuthenticUser, userController.deleteUser.bind(userController));
 
